@@ -1,0 +1,56 @@
+{
+  "name": "zoutapps/laravel-lang-vendornamespace",
+  "description": "Use a translation namespace vor mutliple translation files.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oliver Ziegler",
+      "email": "oliver.ziegler@zoutapps.de",
+      "homepage": "https://github.com/OliverZiegler"
+    }
+  ],
+  "homepage": "https://github.com/zoutapps/laravel-lang-vendornamespace",
+  "keywords": [
+    "Laravel",
+    "Backpack",
+    "lang",
+    "namespace",
+    "vendor",
+    "package",
+    "development",
+    "laravel-lang-vendornamespace"
+  ],
+  "require": {
+    "geoip2/geoip2":"~2.0",
+    "illuminate/console": "~5",
+    "illuminate/database": "~5",
+    "illuminate/http": "~5",
+    "illuminate/support": "~5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~7.0",
+    "mockery/mockery": "^1.1",
+    "orchestra/testbench": "~3.0",
+    "sempro/phpunit-pretty-print": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zoutapps\\Laravel\\Lang\\VendorNamespace\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zoutapps\\Laravel\\Lang\\VendorNamespace\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Zoutapps\\Laravel\\Lang\\VendorNamespace\\VendorNamespaceServiceProvider"
+      ],
+      "aliases": {
+        "Laravel\\Lang\\VendorNamespace": "Zoutapps\\Laravel\\Lang\\VendorNamespace\\Facades\\VendorNamespace"
+      }
+    }
+  }
+}
