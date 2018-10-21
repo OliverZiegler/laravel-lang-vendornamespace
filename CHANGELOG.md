@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `laravel-backpack-usermanager` will be documented in this file.
+All notable changes to `laravel-lang-vendornamespace` will be documented in this file.
 
 ## Version 1.0
 
