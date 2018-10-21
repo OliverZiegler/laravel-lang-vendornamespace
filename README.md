@@ -5,7 +5,23 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-This is where your description should go. Take a look at [contributing.md](contributing.md) to see a to do list.
+This package is aimed at package developers that want multiple packages translations under one namespace.
+
+It's currently not easily possible to gather all your packages translations under one namespace 
+which can bloat up the calls to your translations as well as your _resources/lang/vendor_ folder
+when publishing the files.
+
+For example having packages:
+* `zoutapps/awesome-package`
+* `zoutapps/nice-package`
+
+you can't register the translations to be able to use them like this:
+```php
+trans('zoutapps::awesome-package')
+trans('zoutapps::nice-package')
+```
+
+**With this package you now can do this!**
 
 ## Installation
 
@@ -16,6 +32,25 @@ $ composer require zoutapps/laravel-lang-vendornamespace
 ```
 
 ## Usage
+
+In your `PackageServiceProvider` instead of using  
+`$this->loadTranslationsFrom(__DIR__ . '/../resources/lang', '<your-vendor-name>')`  
+make a call to  
+`VendorNamespace::loadTranslationsFrom(__DIR__ . '/../resources/lang', '<your-vendor-name>')` 
+in your `boot()` method.
+
+Publishing your translations is the same as before:
+
+```php
+$this->publishes([
+    __DIR__ . '/../resources/lang' => resource_path('lang/vendor/<your-vendor-name>'),
+], 'lang');
+```
+
+## What it does
+
+We will create a folder for every namespace and in this folder all loaded translations will be symlinked.
+After that this folder will be linked as the namespace folder in the laravel TranslationLoader. 
 
 ## Change log
 
