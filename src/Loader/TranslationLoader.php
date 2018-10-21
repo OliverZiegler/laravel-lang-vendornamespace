@@ -17,10 +17,16 @@ class TranslationLoader
 
     protected $translator;
 
+    protected $basePath = __DIR__ . '/../../resources/lang/';
+
     public function __construct(Filesystem $files)
     {
         $this->files = $files;
         $this->translator = app('translator');
+
+        app()->booted(function () {
+            $this->bootedHandler();
+        });
     }
 
     public function addVendorNamespace($namespace, $path)
@@ -30,31 +36,65 @@ class TranslationLoader
         }
 
         array_push($this->vendorHints[$namespace], $path);
-        $this->generateLinks($namespace, $path);
+    }
+
+    private function bootedHandler()
+    {
+        if ($this->shouldGenerate()) {
+            $this->clear();
+            $this->generate();
+        }
+    }
+
+    private function shouldGenerate(): bool
+    {
+        if (app()->environment() == 'local') {
+            return true;
+        }
+
+        return !$this->files->isDirectory($this->basePath);
+    }
+
+    private function clear()
+    {
+        $this->files->deleteDirectory($this->basePath);
+    }
+
+    private function generate()
+    {
+        foreach ($this->vendorHints as $namespace => $paths) {
+            // add namespace directory
+            $this->files->makeDirectory($this->basePath, 0755, true, true);
+
+            // register directory
+            $this->translator->addNamespace($namespace, $this->basePath);
+
+            foreach ($paths as $path) {
+                $this->generateLinks($namespace, $path);
+            }
+        }
     }
 
     private function generateLinks($namespace, $path)
     {
         $languages = $this->loadLanguages($path);
-        $base = __DIR__.'/../../resources/lang/'.$namespace;
 
-        foreach($languages as $language) {
-            $dir = $base.'/'.$language;
-            $this->files->makeDirectory($base.'/'.$language, 0755, true, true);
-            $groups = $this->files->files($path.'/'.$language);
+        foreach ($languages as $language) {
+            $dir = $this->basePath . $namespace . '/' . $language;
+            $this->files->makeDirectory($dir, 0755, true, true);
+            $groups = $this->files->files($path . '/' . $language);
 
             foreach ($groups as $file) {
-                if ($this->files->exists($path = $dir.'/'.$file->getFilename())) {
-                    $this->files->delete($path);
+                if ($this->files->exists($filePath = $dir . '/' . $file->getFilename())) {
+                    $this->files->delete($filePath);
                 }
-                $this->files->link($file->getPathname(), $path);
+                $this->files->link($file->getPathname(), $filePath);
             }
         }
-
-        $this->translator->addNamespace($namespace, $base);
     }
 
-    private function loadLanguages($path) {
+    private function loadLanguages($path)
+    {
         return array_map('basename', $this->files->directories($path));
     }
 }
