@@ -31,7 +31,7 @@ class TranslationLoader
 
     public function addVendorNamespace($namespace, $path)
     {
-        if (!isset($this->vendorHints[$namespace])) {
+        if (! isset($this->vendorHints[$namespace])) {
             $this->vendorHints[$namespace] = [];
         }
 
@@ -53,7 +53,7 @@ class TranslationLoader
         }
 
         // if directory does not exist, we need to generate it
-        if (!$this->files->isDirectory($this->basePath)) {
+        if (! $this->files->isDirectory($this->basePath)) {
             return true;
         }
 
