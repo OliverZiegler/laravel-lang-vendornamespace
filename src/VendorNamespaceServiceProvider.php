@@ -7,6 +7,19 @@ use Illuminate\Support\ServiceProvider;
 class VendorNamespaceServiceProvider extends ServiceProvider
 {
     /**
+     * Register any package services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // Register the service the package provides.
+        $this->app->singleton('VendorNamespace', function ($app) {
+            return new VendorNamespace($app['files']);
+        });
+    }
+
+    /**
      * Perform post-registration booting of services.
      *
      * @return void
@@ -20,28 +33,13 @@ class VendorNamespaceServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // Register the service the package provides.
-        $this->app->singleton('VendorNamespace', function ($app) {
-            return new VendorNamespace;
-        });
-    }
-
-    /**
      * Get the services provided by the provider.
      *
      * @return array
      */
     public function provides()
     {
-        return [
-            VendorNamespace::class,
-        ];
+        return [VendorNamespace::class];
     }
 
     /**

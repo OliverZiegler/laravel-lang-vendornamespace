@@ -49,7 +49,7 @@
         "Zoutapps\\Laravel\\Lang\\VendorNamespace\\VendorNamespaceServiceProvider"
       ],
       "aliases": {
-        "Laravel\\Lang\\VendorNamespace": "Zoutapps\\Laravel\\Lang\\VendorNamespace\\Facades\\VendorNamespace"
+        "VendorNamespace": "Zoutapps\\Laravel\\Lang\\VendorNamespace\\Facades\\VendorNamespace"
       }
     }
   }
