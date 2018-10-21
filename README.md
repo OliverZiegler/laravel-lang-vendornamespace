@@ -49,8 +49,17 @@ $this->publishes([
 
 ## What it does
 
-We will create a folder for every namespace and in this folder all loaded translations will be symlinked.
-After that this folder will be linked as the namespace folder in the laravel TranslationLoader. 
+All paths you register will be added to your translation namespace.  
+For this to happen, we wait for the application booted callback and:
+* we will create a folder for every namespace
+* symlink all your provided translation files in the namespace folder
+* add the generated folder to the laravel `TranslationLoader` namespaces
+
+## Development
+
+While your app environment is set to `local` we will always regenerate the links.
+When your app is in any other environment, we will check for existence of the _lang_ folder inside our package
+and only generate the links if it is not present.
 
 ## Change log
 

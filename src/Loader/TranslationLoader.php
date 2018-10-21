@@ -52,7 +52,16 @@ class TranslationLoader
             return true;
         }
 
-        return !$this->files->isDirectory($this->basePath);
+        // if directory does not exist, we need to generate it
+        if (!$this->files->isDirectory($this->basePath)) {
+            return true;
+        }
+
+        // check for application was updated
+        $lastLockFileChange = $this->files->lastModified(base_path('composer.lock'));
+        $lastBaseDirChange = $this->files->lastModified($this->basePath);
+
+        return $lastBaseDirChange < $lastLockFileChange;
     }
 
     private function clear()
@@ -62,16 +71,16 @@ class TranslationLoader
 
     private function generate()
     {
+        // add lang base directory
+        $this->files->makeDirectory($this->basePath, 0755, true, true);
+
         foreach ($this->vendorHints as $namespace => $paths) {
-            // add namespace directory
-            $this->files->makeDirectory($this->basePath, 0755, true, true);
-
-            // register directory
-            $this->translator->addNamespace($namespace, $this->basePath);
-
             foreach ($paths as $path) {
                 $this->generateLinks($namespace, $path);
             }
+
+            // register namespace
+            $this->translator->addNamespace($namespace, $this->basePath . $namespace);
         }
     }
 
