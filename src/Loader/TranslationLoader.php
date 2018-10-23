@@ -44,6 +44,8 @@ class TranslationLoader
             $this->clear();
             $this->generate();
         }
+
+        $this->link();
     }
 
     private function shouldGenerate(): bool
@@ -78,7 +80,12 @@ class TranslationLoader
             foreach ($paths as $path) {
                 $this->generateLinks($namespace, $path);
             }
+        }
+    }
 
+    private function link()
+    {
+        foreach ($this->vendorHints as $namespace => $paths) {
             // register namespace
             $this->translator->addNamespace($namespace, $this->basePath . $namespace);
         }
