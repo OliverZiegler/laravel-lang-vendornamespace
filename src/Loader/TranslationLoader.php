@@ -50,10 +50,6 @@ class TranslationLoader
 
     private function shouldGenerate(): bool
     {
-        if (app()->environment() == 'local') {
-            return true;
-        }
-
         // if directory does not exist, we need to generate it
         if (! $this->files->isDirectory($this->basePath)) {
             return true;
